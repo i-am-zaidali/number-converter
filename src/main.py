@@ -11,8 +11,9 @@ changed = st.session_state.get("changed", 0)
 
 def on_change(base_key, **kwargs):
     state = kwargs.get(f"{base_key}-convert-input", None)
-    if state is None:
-        st.error(f"No state found for {base_key}")
+    if state in [None, ""]:
+        st.error(f"No input found for {base_key}")
+        return
     btn = {"binary": 2, "octal": 8, "decimal": 10, "hex": 16}
     base = btn.get(base_key, 2)
     try:
@@ -25,7 +26,7 @@ def on_change(base_key, **kwargs):
 binary = col1.text_input(
     "Binary input",
     key="binary-convert-input",
-    placeholder=bin(changed).replace("0b", ""),
+    value=bin(changed).replace("0b", ""),
     on_change=on_change,
     kwargs=st.session_state,
     args=("binary",),
@@ -33,7 +34,7 @@ binary = col1.text_input(
 octal = col1.text_input(
     "Octal input",
     key="octal-convert-input",
-    placeholder=oct(changed).replace("0o", ""),
+    value=oct(changed).replace("0o", ""),
     on_change=on_change,
     kwargs=st.session_state,
     args=("octal",),
@@ -41,7 +42,7 @@ octal = col1.text_input(
 dec = col2.text_input(
     "Decimal input",
     key="decimal-convert-input",
-    placeholder=str(changed),
+    value=str(changed),
     on_change=on_change,
     kwargs=st.session_state,
     args=("decimal",),
@@ -49,7 +50,7 @@ dec = col2.text_input(
 hexa = col2.text_input(
     "Hexadecimal input",
     key="hex-convert-input",
-    placeholder=hex(changed).replace("0x", ""),
+    value=hex(changed).replace("0x", ""),
     on_change=on_change,
     kwargs=st.session_state,
     args=("hex",),
